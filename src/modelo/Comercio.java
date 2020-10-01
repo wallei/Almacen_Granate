@@ -166,10 +166,10 @@ public class Comercio extends Actor {
 		List<Turno> lstTurnosLibres = new ArrayList<Turno>(); // genero mi listado de Turnos libres VACIO.
 
 		DiaRetiro diaderetiro= traerDiaDeRetiro(fecha);
-		System.out.println("First chota");
+	
 		
 		if (diaderetiro!= null) {
-			System.out.println("Second chota");
+		
 			LocalTime horaDesde = diaderetiro.getHoraDesde() ;
 			LocalTime horaHasta = diaderetiro.getHoraHasta() ;
 			int intervalo = diaderetiro.getIntervalo();
@@ -205,4 +205,78 @@ public class Comercio extends Actor {
 
 	}
 
+
+	public boolean agregarArticulo(String nombre, String codBarras, double precio) throws Exception {
+		boolean agregarArticulo= false;
+		int idUltimo=0;
+		
+		if (traerArticulo(codBarras)!= null ) {
+			throw new Exception ("El ARTICULO ya existe!");
+		}else {
+			
+			if (lstArticulos.size() > 0) {
+
+				idUltimo = lstArticulos.get(lstArticulos.size() - 1).getId(); // obtengo el ID del ultimo item de mi carrito.
+			}
+			
+			Articulo articulo = new Articulo(idUltimo+1,nombre,codBarras, precio);
+			agregarArticulo= lstArticulos.add(articulo);
+		}
+		
+
+		
+		return agregarArticulo;
+	}
+	
+	
+	public Articulo traerArticulo(String codBarras) {
+		Articulo articulo = null; //bandera que dice que esta vacia
+		
+		int i = 0;
+		
+		while (articulo== null && i < lstArticulos.size()) { // SI NO ENCUENTRO LA PELICULA | i<catalogo.size PARA NO
+															// EXCEDER DEL TAMAÑO.
+			if (codBarras.compareTo(lstArticulos.get(i).getCodBarras())== 0) {
+				articulo = lstArticulos.get(i);
+			}
+			i++; // 
+		}
+
+		return articulo;
+	}
+	
+	//Carrito carro1 = new Carrito(1, LocalDate.of(2020, 10, 01), LocalTime.of(10, 11), true, 10, cliente1, retirolocal1);
+	public boolean agregarCarrito(LocalDate fecha, LocalTime hora, boolean cerrado, double descuento, Cliente cliente, Entrega entrega) {
+		boolean agregarCarritoOk = true;
+		int i = 0;
+		int idUltimo = 0;
+		int totalCarritos = 0;
+
+		totalCarritos = lstCarrito.size();
+
+		if (totalCarritos > 0) {
+			idUltimo = lstCarrito.get(totalCarritos - 1).getId();
+		}
+
+		Carrito carrito1 = new Carrito(idUltimo + 1, fecha, hora, cerrado, descuento,cliente, entrega);
+		return lstCarrito.add(carrito1);
+
+	}
+
+	public Carrito traerCarrito(int id) {
+		// LA BUSQUEDA LA HAGO POR DNI.
+		Carrito carro = null;
+
+		int i = 0;
+		while (carro == null && i < lstCarrito.size()) {
+
+			if (id == lstCarrito.get(i).getId()) {
+				carro = lstCarrito.get(i);
+			}
+			i++; // cambio de producto.
+		}
+
+		return carro;
+	}
+	
 }

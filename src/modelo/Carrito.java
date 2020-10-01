@@ -107,4 +107,51 @@ public Entrega getEntrega() {
 public void setEntrega(Entrega entrega) {
 	this.entrega = entrega;
 }
+
+
+/* + agregar(Articulo articulo, int cantidad):boolean */
+
+
+public boolean agregarItem(Articulo articulo, int cantidad) throws Exception {
+
+	boolean agregarItem = false;
+	boolean encontrarItem = false;
+	int i = 0;
+	;
+
+	ItemCarrito itemcarro = traerItem(articulo); // invoco al metodo que cree mas abajo.
+	if (itemcarro == null) {
+
+		itemcarro = new ItemCarrito(articulo, cantidad);
+		agregarItem = lstItemCarrito.add(itemcarro); // EL ADD SIEMPRE, PERO SIEMPRE ME VA A DEVOLVER UN BOOLEANO.
+	} else {
+		itemcarro.setCantidad(itemcarro.getCantidad() + cantidad); // getCANTIDAD, para que me devuelva la que TENGO
+																	// + LA CANTIDAD NUEVA QUE LE PASO.
+		agregarItem = true;
+	}
+
+	return agregarItem;
+}
+
+public ItemCarrito traerItem(Articulo articulo) {
+	ItemCarrito item = null;
+
+	int i = 0;
+	while (item == null && i < lstItemCarrito.size()) {
+
+		if (articulo.equals(lstItemCarrito.get(i).getArticulo())) {
+			item = lstItemCarrito.get(i);
+		}
+		i++; // cambio de producto.
+	}
+	return item;
+}
+
+
+@Override
+public String toString() {
+	return "Carrito [id=" + id + ", fecha=" + fecha + ", hora=" + hora + ", cerrado=" + cerrado + ", descuento="
+			+ descuento + ", cliente=" + cliente + ", lstItemCarrito=" + lstItemCarrito + ", entrega=" + entrega + "]";
+}
+
 }
